@@ -6,8 +6,9 @@
 import http from 'node:http';
 // when use ES Module is needed import file with your extension
 import { json } from './middlewares/json.js';
+import { Database } from './database.js';
 
-const users = [];
+const database = new Database();
 
 const server = http.createServer(async (request, response) => {
 
@@ -16,6 +17,8 @@ const server = http.createServer(async (request, response) => {
     await json(request, response);
 
     if(method === 'GET' && url === '/users') {
+        const users = database.database('users');
+
         return response.end(JSON.stringify(users));
     }
 
@@ -23,11 +26,13 @@ const server = http.createServer(async (request, response) => {
 
         const { name, email } = request.body;
 
-        users.push({
+        const user = {
             id: 1,
             name,
             email
-        });
+        };
+
+        database.insert('users', user);
 
         return response
             .writeHead(201)
