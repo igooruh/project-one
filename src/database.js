@@ -29,7 +29,7 @@ export class Database {
         if(Array.isArray(this.#database[nameTable])) {
             this.#database[nameTable].push(data);
         } else {
-            this.#database[nameTable] = data;
+            this.#database[nameTable] = [data];
         }
 
         this.#persist();
